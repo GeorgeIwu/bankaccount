@@ -56,7 +56,7 @@ contract BankAccount {
 
     modifier validOtherOwners(address[] calldata otherOwners) {
         bool isInvalidOwner;
-        require(otherOwners.length < 5, "only 4 owners maximum");
+        require(otherOwners.length < 4, "only 3 other owners maximum");
         for (uint idx; idx < otherOwners.length; idx++) {
             if (otherOwners[idx] == msg.sender){
                 isInvalidOwner = true;
@@ -124,7 +124,7 @@ contract BankAccount {
         emit AccountCreated(owners, id, block.timestamp);
     }
 
-    function requestWithdrawal(uint accountId, uint amount) external accountOwner(accountId) sufficientBalance(accountId, amount) {
+    function requestWithdrawl(uint accountId, uint amount) external accountOwner(accountId) sufficientBalance(accountId, amount) {
         uint id = nextWithdrawId;
         accounts[accountId].withdrawRequests[id].amount = amount;
         accounts[accountId].withdrawRequests[id].user = msg.sender;
@@ -133,7 +133,7 @@ contract BankAccount {
         emit WithdrawRequested(msg.sender, accountId, id, amount, block.timestamp);
     }
 
-    function approveWithdrawal(uint accountId, uint withdrawId) external accountOwner(accountId) validApprover(accountId, withdrawId) {
+    function approveWithdrawl(uint accountId, uint withdrawId) external accountOwner(accountId) validApprover(accountId, withdrawId) {
         WithdrawRequest storage request = accounts[accountId].withdrawRequests[withdrawId];
         request.ownersApproved[msg.sender] = true;
         request.approvals++;
